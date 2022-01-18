@@ -66,6 +66,7 @@ class _HomePageState extends State<HomePage> {
                           setState(() {
                             checkboxes.add(input);
                           });
+                          input = CheckboxState(text: '');
                           Navigator.of(context).pop();
                         },
                         child: const Text('Add'))
