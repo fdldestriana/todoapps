@@ -40,7 +40,7 @@ class _HomePageState extends State<HomePage> {
           itemCount: checkboxes.length,
           itemBuilder: (context, index) {
             return Dismissible(
-              key: Key(checkboxes[index].toString()),
+              key: UniqueKey(),
               child: Card(
                   elevation: 4, child: buildSingleCheckBox(checkboxes[index])),
               onDismissed: (direction) => checkboxes.removeAt(index),
