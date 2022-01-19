@@ -69,8 +69,8 @@ class _HomePageState extends State<HomePage> {
                     TextButton(
                         onPressed: () {
                           /// ADD DATA HERE
-                          todos.add({'todos': input.text});
-                          todos.add({'isChecked': input.value});
+                          todos.add(
+                              {'todos': input.text, 'isChecked': input.value});
                           input = CheckboxState(text: '', value: false);
                           Navigator.of(context).pop();
                         },
