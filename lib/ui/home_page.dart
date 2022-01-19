@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:todoapps/model/checkbox_state.dart';
 
@@ -32,6 +33,8 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    FirebaseFirestore firestore = FirebaseFirestore.instance;
+    CollectionReference todos = firestore.collection("todos");
     return Scaffold(
       appBar: AppBar(
         title: const Text('My Todos'),
@@ -65,7 +68,9 @@ class _HomePageState extends State<HomePage> {
                         onPressed: () {
                           setState(() {
                             checkboxes.add(input);
+                            todos.add({"todos": input.text});
                           });
+
                           input = CheckboxState(text: '');
                           Navigator.of(context).pop();
                         },
