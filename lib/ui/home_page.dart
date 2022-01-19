@@ -11,25 +11,10 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  CheckboxState input = CheckboxState(text: '');
-  final checkboxes = [
-    CheckboxState(text: 'Buy groceries'),
-    CheckboxState(text: 'Going lunch'),
-    CheckboxState(text: 'Meet Adam Warlock'),
-    CheckboxState(text: 'Adding checkout fiture'),
-    CheckboxState(text: 'Brainstorming Solidity'),
-  ];
-
-  Widget buildSingleCheckBox(CheckboxState checkbox) {
-    return CheckboxListTile(
-        title: Text(checkbox.text),
-        value: checkbox.value,
-        onChanged: (value) {
-          setState(() {
-            checkbox.value = value!;
-          });
-        });
-  }
+  CheckboxState input = CheckboxState(
+    text: '',
+    value: false,
+  );
 
   @override
   Widget build(BuildContext context) {
@@ -39,16 +24,33 @@ class _HomePageState extends State<HomePage> {
       appBar: AppBar(
         title: const Text('My Todos'),
       ),
-      body: ListView.builder(
-          itemCount: checkboxes.length,
-          itemBuilder: (context, index) {
-            return Dismissible(
-              key: UniqueKey(),
-              child: Card(
-                  elevation: 4, child: buildSingleCheckBox(checkboxes[index])),
-              onDismissed: (direction) => checkboxes.removeAt(index),
-            );
-          }),
+      body: ListView(children: [
+        /// VIEW DATA HERE
+        FutureBuilder<QuerySnapshot>(
+            future: todos.get(),
+            builder: (context, snapshot) {
+              if (snapshot.hasData) {
+                return Column(
+                  children: snapshot.data!.docs
+                      .map((e) => Dismissible(
+                          key: UniqueKey(),
+                          child: Card(
+                              elevation: 4,
+                              child: CheckboxListTile(
+                                  title: Text(e.get('todos')),
+                                  value: e.get('isChecked'),
+                                  onChanged: (value) {
+                                    value = e.get('isChecked');
+                                  })),
+                          // ignore: avoid_returning_null_for_void
+                          onDismissed: (direction) => null))
+                      .toList(),
+                );
+              } else {
+                return const Text('Loading data');
+              }
+            })
+      ]),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           showDialog(
@@ -66,12 +68,10 @@ class _HomePageState extends State<HomePage> {
                   actions: <Widget>[
                     TextButton(
                         onPressed: () {
-                          setState(() {
-                            checkboxes.add(input);
-                            todos.add({"todos": input.text});
-                          });
-
-                          input = CheckboxState(text: '');
+                          /// ADD DATA HERE
+                          todos.add({'todos': input.text});
+                          todos.add({'isChecked': input.value});
+                          input = CheckboxState(text: '', value: false);
                           Navigator.of(context).pop();
                         },
                         child: const Text('Add'))
