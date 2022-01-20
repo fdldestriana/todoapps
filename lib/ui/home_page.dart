@@ -26,29 +26,56 @@ class _HomePageState extends State<HomePage> {
       ),
       body: ListView(children: [
         /// VIEW DATA HERE
-        FutureBuilder<QuerySnapshot>(
-            future: todos.get(),
+        /// First attempt to fecth data from firestore, once
+        // FutureBuilder<QuerySnapshot>(
+        //     future: todos.get(),
+        //     builder: (context, snapshot) {
+        //       if (snapshot.hasData) {
+        //         return Column(
+        //           children: snapshot.data!.docs
+        //               .map((e) => Dismissible(
+        //                   key: UniqueKey(),
+        //                   child: Card(
+        //                       elevation: 4,
+        //                       child: CheckboxListTile(
+        //                           title: Text(e.get('todos')),
+        //                           value: e.get('isChecked'),
+        //                           onChanged: (value) {
+        //                             value = e.get('isChecked');
+        //                           })),
+        //                   // ignore: avoid_returning_null_for_void
+        //                   onDismissed: (direction) => null))
+        //               .toList(),
+        //         );
+        //       } else {
+        //         return const Text('Loading data');
+        //       }
+        //     })
+
+        /// Second attempt to fecth data from firestore, streamingly
+        StreamBuilder<QuerySnapshot>(
+            stream: todos.snapshots(),
             builder: (context, snapshot) {
-              if (snapshot.hasData) {
-                return Column(
-                  children: snapshot.data!.docs
-                      .map((e) => Dismissible(
-                          key: UniqueKey(),
-                          child: Card(
-                              elevation: 4,
-                              child: CheckboxListTile(
-                                  title: Text(e.get('todos')),
-                                  value: e.get('isChecked'),
-                                  onChanged: (value) {
-                                    value = e.get('isChecked');
-                                  })),
-                          // ignore: avoid_returning_null_for_void
-                          onDismissed: (direction) => null))
-                      .toList(),
-                );
-              } else {
-                return const Text('Loading data');
-              }
+              return Column(
+                children: snapshot.data!.docs
+                    .map((e) => Dismissible(
+                        key: UniqueKey(),
+                        child: Card(
+                            elevation: 4,
+                            child: CheckboxListTile(
+                                title: Text(e.get('todos')),
+                                value: e.get('isChecked'),
+                                onChanged: (value) {
+                                  setState(() {
+                                    // value = !value!;
+                                    todos
+                                        .doc(e.id)
+                                        .update({'isChecked': value});
+                                  });
+                                })),
+                        onDismissed: (direction) => todos.doc(e.id).delete()))
+                    .toList(),
+              );
             })
       ]),
       floatingActionButton: FloatingActionButton(
