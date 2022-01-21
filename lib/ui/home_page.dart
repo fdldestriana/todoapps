@@ -23,26 +23,29 @@ class _HomePageState extends State<HomePage> {
       body: ListView(children: [
         /// VIEW DATA HERE
         StreamBuilder<QuerySnapshot>(
-            stream: todo.getData(),
+            // get stream of data from the Todo.getTodo()
+            stream: todo.getTodo(),
             builder: (context, snapshot) {
               if (snapshot.hasData) {
                 return Column(
                   children: snapshot.data!.docs
-                      .map((e) => Dismissible(
+                      .map((QueryDocumentSnapshot document) => Dismissible(
                           key: UniqueKey(),
                           child: Card(
                               elevation: 4,
                               child: CheckboxListTile(
-                                  title: Text(e.get('todos')),
-                                  value: e.get('isChecked'),
+                                  title: Text(document['todos']),
+                                  value: document['isChecked'],
                                   onChanged: (value) {
                                     setState(() {
-                                      todos
-                                          .doc(e.id)
-                                          .update({'isChecked': value});
+                                      todo.updateTodo(document);
+                                      // todos
+                                      //     .doc(e.id)
+                                      //     .update({'isChecked': value});
                                     });
                                   })),
-                          onDismissed: (direction) => todos.doc(e.id).delete()))
+                          onDismissed: (direction) =>
+                              todos.doc(document.id).delete()))
                       .toList(),
                 );
               } else {
@@ -60,8 +63,8 @@ class _HomePageState extends State<HomePage> {
                       borderRadius: BorderRadius.circular(10)),
                   title: const Text('Add Todos'),
                   content: TextField(
-                    onChanged: (String value) {
-                      todo.text = value;
+                    onChanged: (String text) {
+                      todo.text = text;
                     },
                   ),
                   actions: <Widget>[

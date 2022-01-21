@@ -12,9 +12,11 @@ class Todo {
     return todo.add({'todos': text, 'isChecked': value});
   }
 
-  Stream<QuerySnapshot<Object?>> getData() {
-    return todo.snapshots();
+  Future<void> updateTodo(QueryDocumentSnapshot e) {
+    return todo.doc(e.id).update({'isChecked': value});
   }
 
-  doc(String id) {}
+  Stream<QuerySnapshot<Object?>> getTodo() {
+    return todo.snapshots();
+  }
 }
