@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:todoapps/model/checkbox_state.dart';
+import 'package:todoapps/model/todo.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key, required this.title}) : super(key: key);
@@ -11,71 +11,43 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  CheckboxState input = CheckboxState(
-    text: '',
-    value: false,
-  );
-
   @override
   Widget build(BuildContext context) {
     FirebaseFirestore firestore = FirebaseFirestore.instance;
     CollectionReference todos = firestore.collection("todos");
+    Todo todo = Todo(text: '', value: false);
     return Scaffold(
       appBar: AppBar(
         title: const Text('My Todos'),
       ),
       body: ListView(children: [
         /// VIEW DATA HERE
-        /// First attempt to fecth data from firestore, once
-        // FutureBuilder<QuerySnapshot>(
-        //     future: todos.get(),
-        //     builder: (context, snapshot) {
-        //       if (snapshot.hasData) {
-        //         return Column(
-        //           children: snapshot.data!.docs
-        //               .map((e) => Dismissible(
-        //                   key: UniqueKey(),
-        //                   child: Card(
-        //                       elevation: 4,
-        //                       child: CheckboxListTile(
-        //                           title: Text(e.get('todos')),
-        //                           value: e.get('isChecked'),
-        //                           onChanged: (value) {
-        //                             value = e.get('isChecked');
-        //                           })),
-        //                   // ignore: avoid_returning_null_for_void
-        //                   onDismissed: (direction) => null))
-        //               .toList(),
-        //         );
-        //       } else {
-        //         return const Text('Loading data');
-        //       }
-        //     })
-
-        /// Second attempt to fecth data from firestore, streamingly
         StreamBuilder<QuerySnapshot>(
-            stream: todos.snapshots(),
+            stream: todo.getData(),
             builder: (context, snapshot) {
-              return Column(
-                children: snapshot.data!.docs
-                    .map((e) => Dismissible(
-                        key: UniqueKey(),
-                        child: Card(
-                            elevation: 4,
-                            child: CheckboxListTile(
-                                title: Text(e.get('todos')),
-                                value: e.get('isChecked'),
-                                onChanged: (value) {
-                                  setState(() {
-                                    // value = !value!;
-                                    todos
-                                        .doc(e.id)
-                                        .update({'isChecked': value});
-                                  });
-                                })),
-                        onDismissed: (direction) => todos.doc(e.id).delete()))
-                    .toList(),
-              );
+              if (snapshot.hasData) {
+                return Column(
+                  children: snapshot.data!.docs
+                      .map((e) => Dismissible(
+                          key: UniqueKey(),
+                          child: Card(
+                              elevation: 4,
+                              child: CheckboxListTile(
+                                  title: Text(e.get('todos')),
+                                  value: e.get('isChecked'),
+                                  onChanged: (value) {
+                                    setState(() {
+                                      todos
+                                          .doc(e.id)
+                                          .update({'isChecked': value});
+                                    });
+                                  })),
+                          onDismissed: (direction) => todos.doc(e.id).delete()))
+                      .toList(),
+                );
+              } else {
+                return const CircularProgressIndicator();
+              }
             })
       ]),
       floatingActionButton: FloatingActionButton(
@@ -89,16 +61,15 @@ class _HomePageState extends State<HomePage> {
                   title: const Text('Add Todos'),
                   content: TextField(
                     onChanged: (String value) {
-                      input.text = value;
+                      todo.text = value;
                     },
                   ),
                   actions: <Widget>[
                     TextButton(
                         onPressed: () {
                           /// ADD DATA HERE
-                          todos.add(
-                              {'todos': input.text, 'isChecked': input.value});
-                          input = CheckboxState(text: '', value: false);
+                          todo.addTodo(todo.text, todo.value);
+                          todo = Todo(text: '', value: false);
                           Navigator.of(context).pop();
                         },
                         child: const Text('Add'))
