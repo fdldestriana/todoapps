@@ -23,7 +23,7 @@ class _HomePageState extends State<HomePage> {
       body: ListView(children: [
         /// VIEW DATA HERE
         StreamBuilder<QuerySnapshot>(
-            stream: todos.snapshots(),
+            stream: todo.readTodo(),
             builder: (context, snapshot) {
               if (snapshot.hasData) {
                 return Column(
@@ -37,12 +37,15 @@ class _HomePageState extends State<HomePage> {
                                   value: document['isChecked'],
                                   onChanged: (value) {
                                     setState(() {
+                                      /// UPDATE DATA HERE
                                       todos
                                           .doc(document.id)
                                           .update({'isChecked': value});
                                     });
                                   })),
                           onDismissed: (direction) =>
+
+                              /// DELETE DATA HERE
                               todos.doc(document.id).delete()))
                       .toList(),
                 );

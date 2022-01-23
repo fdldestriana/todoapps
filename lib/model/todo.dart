@@ -44,4 +44,9 @@ class Database {
     };
     await _reference.add(data);
   }
+
+  Stream<QuerySnapshot> readTodo() {
+    var todo = _reference.snapshots();
+    return todo;
+  }
 }
