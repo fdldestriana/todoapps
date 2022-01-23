@@ -1,33 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-// class Todo {
-//   String text;
-//   bool value;
-//   static CollectionReference todo =
-//       FirebaseFirestore.instance.collection('todos');
-
-//   Todo({required this.text, required this.value});
-
-//   Future addTodo(String text, bool value) {
-//     return todo.add({'todos': text, 'isChecked': value});
-//   }
-
-//   Future<void> updateTodo(QueryDocumentSnapshot e) {
-//     return todo.doc(e.id).update({'isChecked': value});
-//   }
-
-//   Stream<QuerySnapshot<Object?>> getTodo() {
-//     return todo.snapshots();
-//   }
-
-//   factory Todo.fromJson(Map<String, dynamic> json) {
-//     return Todo(text: json['text'], value: json['value']);
-//   }
-
-//   Map<String, dynamic> toJson() {
-//     return {'text': text, 'value': value};
-//   }
-// }
 final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 final CollectionReference _reference = _firestore.collection('todos');
 
@@ -48,5 +20,14 @@ class Database {
   Stream<QuerySnapshot> readTodo() {
     var todo = _reference.snapshots();
     return todo;
+  }
+
+  Future<void> deleteTodo() async {
+    await _reference.doc().collection('todos').doc().delete();
+  }
+
+  Future<void> updateTodo(bool? value) async {
+    Map<String, bool> data = <String, bool>{'isChecked': value!};
+    await _reference.doc().collection('todos').doc().update(data);
   }
 }

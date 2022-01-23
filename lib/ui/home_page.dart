@@ -38,15 +38,16 @@ class _HomePageState extends State<HomePage> {
                                   onChanged: (value) {
                                     setState(() {
                                       /// UPDATE DATA HERE
-                                      todos
-                                          .doc(document.id)
-                                          .update({'isChecked': value});
+                                      todo.updateTodo(value);
+                                      // todos
+                                      //     .doc(document.id)
+                                      //     .update({'isChecked': value});
                                     });
                                   })),
                           onDismissed: (direction) =>
 
                               /// DELETE DATA HERE
-                              todos.doc(document.id).delete()))
+                              todo.deleteTodo()))
                       .toList(),
                 );
               } else {
