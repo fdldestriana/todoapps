@@ -15,7 +15,7 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     FirebaseFirestore firestore = FirebaseFirestore.instance;
     CollectionReference todos = firestore.collection("todos");
-    Todo todo = Todo(text: '', value: false);
+    Database todo = Database(text: '', value: false);
     return Scaffold(
       appBar: AppBar(
         title: const Text('My Todos'),
@@ -23,8 +23,7 @@ class _HomePageState extends State<HomePage> {
       body: ListView(children: [
         /// VIEW DATA HERE
         StreamBuilder<QuerySnapshot>(
-            // get stream of data from the Todo.getTodo()
-            stream: todo.getTodo(),
+            stream: todos.snapshots(),
             builder: (context, snapshot) {
               if (snapshot.hasData) {
                 return Column(
@@ -34,14 +33,13 @@ class _HomePageState extends State<HomePage> {
                           child: Card(
                               elevation: 4,
                               child: CheckboxListTile(
-                                  title: Text(document['todos']),
+                                  title: Text(document['text']),
                                   value: document['isChecked'],
                                   onChanged: (value) {
                                     setState(() {
-                                      todo.updateTodo(document);
-                                      // todos
-                                      //     .doc(e.id)
-                                      //     .update({'isChecked': value});
+                                      todos
+                                          .doc(document.id)
+                                          .update({'isChecked': value});
                                     });
                                   })),
                           onDismissed: (direction) =>
@@ -71,8 +69,8 @@ class _HomePageState extends State<HomePage> {
                     TextButton(
                         onPressed: () {
                           /// ADD DATA HERE
-                          todo.addTodo(todo.text, todo.value);
-                          todo = Todo(text: '', value: false);
+                          todo.addTodo(todo.text!);
+                          todo = Database(text: '');
                           Navigator.of(context).pop();
                         },
                         child: const Text('Add'))
