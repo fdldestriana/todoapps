@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:todoapps/model/todo.dart';
 
 final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 final CollectionReference _reference = _firestore.collection('todos');
@@ -21,6 +22,13 @@ class DatabaseService with ChangeNotifier {
   Stream<QuerySnapshot> readTodo() {
     var todo = _reference.snapshots();
     return todo;
+  }
+
+  /// The new approcah for fetching data from firestore
+  Stream<dynamic> streamReadTodo() {
+    var todos = _reference.snapshots();
+    return todos
+        .map((todo) => todo.docs.map((e) => Todo.fromFirestore(e)).toList());
   }
 
   Future<void> deleteTodo() async {

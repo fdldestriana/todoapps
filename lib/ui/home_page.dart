@@ -1,6 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:todoapps/model/todo.dart';
 import 'package:todoapps/services/database_service.dart';
+import 'package:provider/provider.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key, required this.title}) : super(key: key);
@@ -13,15 +15,17 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
-    FirebaseFirestore firestore = FirebaseFirestore.instance;
-    CollectionReference todos = firestore.collection("todos");
+    // FirebaseFirestore firestore = FirebaseFirestore.instance;
+    // CollectionReference todos = firestore.collection("todos");
     DatabaseService todo = DatabaseService(text: '', value: false);
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('My Todos'),
       ),
       body: ListView(children: [
         /// VIEW DATA HERE
+
         StreamBuilder<QuerySnapshot>(
             stream: todo.readTodo(),
             builder: (context, snapshot) {
@@ -88,5 +92,36 @@ class _HomePageState extends State<HomePage> {
         ),
       ),
     );
+  }
+}
+
+class TodoList extends StatefulWidget {
+  const TodoList({Key? key}) : super(key: key);
+
+  @override
+  State<TodoList> createState() => _TodoListState();
+}
+
+class _TodoListState extends State<TodoList> {
+  @override
+  Widget build(BuildContext context) {
+    var todos = Provider.of<List<Todo>>(context);
+
+    return ListView.builder(
+        itemCount: todos.length,
+        itemBuilder: (context, index) {
+          return Dismissible(
+              key: UniqueKey(),
+              child: Card(
+                  elevation: 4,
+                  child: CheckboxListTile(
+                      title: Text(todos[index].text!),
+                      value: todos[index].value,
+                      onChanged: (value) {
+                        setState(() {});
+                      })),
+              // ignore: avoid_returning_null_for_void
+              onDismissed: (direction) => null);
+        });
   }
 }

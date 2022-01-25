@@ -1,6 +1,8 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:todoapps/services/database_service.dart';
 import 'package:todoapps/ui/home_page.dart';
+import 'package:provider/provider.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -13,13 +15,16 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'Flutter My Todo Apps',
-      theme: ThemeData(
-        primarySwatch: Colors.cyan,
+    return MultiProvider(
+      providers: [ChangeNotifierProvider.value(value: DatabaseService())],
+      child: MaterialApp(
+        debugShowCheckedModeBanner: false,
+        title: 'Flutter My Todo Apps',
+        theme: ThemeData(
+          primarySwatch: Colors.cyan,
+        ),
+        home: const HomePage(title: 'Flutter My Todos'),
       ),
-      home: const HomePage(title: 'Flutter My Todos'),
     );
   }
 }
