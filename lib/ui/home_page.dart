@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:todoapps/model/todo.dart';
+import 'package:todoapps/services/database_service.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key, required this.title}) : super(key: key);
@@ -15,7 +15,7 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     FirebaseFirestore firestore = FirebaseFirestore.instance;
     CollectionReference todos = firestore.collection("todos");
-    Database todo = Database(text: '', value: false);
+    DatabaseService todo = DatabaseService(text: '', value: false);
     return Scaffold(
       appBar: AppBar(
         title: const Text('My Todos'),
@@ -74,7 +74,7 @@ class _HomePageState extends State<HomePage> {
                         onPressed: () {
                           /// ADD DATA HERE
                           todo.addTodo(todo.text!);
-                          todo = Database(text: '');
+                          todo = DatabaseService(text: '');
                           Navigator.of(context).pop();
                         },
                         child: const Text('Add'))
