@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:todoapps/model/todo.dart';
+import 'package:todoapps/core/model/todo.dart';
 
 final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 final CollectionReference _reference = _firestore.collection('todos');
@@ -10,26 +10,6 @@ class DatabaseService with ChangeNotifier {
   bool? value;
 
   DatabaseService({this.text, this.value});
-
-  Future<void> addTodo(String text, {bool value = false}) async {
-    Map<String, dynamic> data = <String, dynamic>{
-      'text': text,
-      'isChecked': value
-    };
-    await _reference.add(data);
-  }
-
-  Stream<QuerySnapshot> readTodo() {
-    var todo = _reference.snapshots();
-    return todo;
-  }
-
-  /// The new approcah for fetching data from firestore
-  Stream<dynamic> streamReadTodo() {
-    var todos = _reference.snapshots();
-    return todos
-        .map((todo) => todo.docs.map((e) => Todo.fromFirestore(e)).toList());
-  }
 
   Future<void> deleteTodo() async {
     await _reference.doc().collection('todos').doc().delete();
@@ -44,6 +24,13 @@ class DatabaseService with ChangeNotifier {
 class FirestoreService {
   final CollectionReference _reference =
       FirebaseFirestore.instance.collection('todos');
+
+  /// The new approcah for fetching data from firestore
+  Stream<List<Todo>> streamReadTodo() {
+    var todos = _reference.snapshots();
+    return todos
+        .map((todo) => todo.docs.map((e) => Todo.fromFirestore(e)).toList());
+  }
 
   Future<void> addTodo(Todo todo) async {
     await _reference.add(todo.toJson());

@@ -1,7 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:todoapps/services/database_service.dart';
-import 'package:todoapps/ui/home_page.dart';
+import 'package:todoapps/core/services/database_service.dart';
+import 'package:todoapps/ui/screens/home_screen.dart';
 import 'package:provider/provider.dart';
 
 void main() async {
