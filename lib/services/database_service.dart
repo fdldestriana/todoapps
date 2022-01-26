@@ -40,3 +40,12 @@ class DatabaseService with ChangeNotifier {
     await _reference.doc().collection('todos').doc().update(data);
   }
 }
+
+class FirestoreService {
+  final CollectionReference _reference =
+      FirebaseFirestore.instance.collection('todos');
+
+  Future<void> addTodo(Todo todo) async {
+    await _reference.add(todo);
+  }
+}
