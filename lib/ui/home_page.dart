@@ -17,7 +17,9 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     // FirebaseFirestore firestore = FirebaseFirestore.instance;
     // CollectionReference todos = firestore.collection("todos");
-    DatabaseService todo = DatabaseService(text: '', value: false);
+    DatabaseService db = DatabaseService(text: '', value: false);
+    FirestoreService service = FirestoreService();
+    Todo todo = Todo();
 
     return Scaffold(
       appBar: AppBar(
@@ -27,7 +29,7 @@ class _HomePageState extends State<HomePage> {
         /// VIEW DATA HERE
 
         StreamBuilder<QuerySnapshot>(
-            stream: todo.readTodo(),
+            stream: db.readTodo(),
             builder: (context, snapshot) {
               if (snapshot.hasData) {
                 return Column(
@@ -37,12 +39,12 @@ class _HomePageState extends State<HomePage> {
                           child: Card(
                               elevation: 4,
                               child: CheckboxListTile(
-                                  title: Text(document['text']),
+                                  title: Text(document['todos']),
                                   value: document['isChecked'],
                                   onChanged: (value) {
                                     setState(() {
                                       /// UPDATE DATA HERE
-                                      todo.updateTodo(value);
+                                      db.updateTodo(value);
                                       // todos
                                       //     .doc(document.id)
                                       //     .update({'isChecked': value});
@@ -51,7 +53,7 @@ class _HomePageState extends State<HomePage> {
                           onDismissed: (direction) =>
 
                               /// DELETE DATA HERE
-                              todo.deleteTodo()))
+                              db.deleteTodo()))
                       .toList(),
                 );
               } else {
@@ -70,15 +72,15 @@ class _HomePageState extends State<HomePage> {
                   title: const Text('Add Todos'),
                   content: TextField(
                     onChanged: (String text) {
-                      todo.text = text;
+                      todo.todos = text;
                     },
                   ),
                   actions: <Widget>[
                     TextButton(
                         onPressed: () {
                           /// ADD DATA HERE
-                          todo.addTodo(todo.text!);
-                          todo = DatabaseService(text: '');
+                          service.addTodo(todo);
+                          todo.todos = '';
                           Navigator.of(context).pop();
                         },
                         child: const Text('Add'))
@@ -95,33 +97,33 @@ class _HomePageState extends State<HomePage> {
   }
 }
 
-class TodoList extends StatefulWidget {
-  const TodoList({Key? key}) : super(key: key);
+// class TodoList extends StatefulWidget {
+//   const TodoList({Key? key}) : super(key: key);
 
-  @override
-  State<TodoList> createState() => _TodoListState();
-}
+//   @override
+//   State<TodoList> createState() => _TodoListState();
+// }
 
-class _TodoListState extends State<TodoList> {
-  @override
-  Widget build(BuildContext context) {
-    var todos = Provider.of<List<Todo>>(context);
+// class _TodoListState extends State<TodoList> {
+//   @override
+//   Widget build(BuildContext context) {
+//     var todos = Provider.of<List<Todo>>(context);
 
-    return ListView.builder(
-        itemCount: todos.length,
-        itemBuilder: (context, index) {
-          return Dismissible(
-              key: UniqueKey(),
-              child: Card(
-                  elevation: 4,
-                  child: CheckboxListTile(
-                      title: Text(todos[index].text!),
-                      value: todos[index].value,
-                      onChanged: (value) {
-                        setState(() {});
-                      })),
-              // ignore: avoid_returning_null_for_void
-              onDismissed: (direction) => null);
-        });
-  }
-}
+//     return ListView.builder(
+//         itemCount: todos.length,
+//         itemBuilder: (context, index) {
+//           return Dismissible(
+//               key: UniqueKey(),
+//               child: Card(
+//                   elevation: 4,
+//                   child: CheckboxListTile(
+//                       title: Text(todos[index].todos!),
+//                       value: todos[index].isChecked,
+//                       onChanged: (value) {
+//                         setState(() {});
+//                       })),
+//               // ignore: avoid_returning_null_for_void
+//               onDismissed: (direction) => null);
+//         });
+//   }
+// }

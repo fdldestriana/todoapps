@@ -46,6 +46,6 @@ class FirestoreService {
       FirebaseFirestore.instance.collection('todos');
 
   Future<void> addTodo(Todo todo) async {
-    await _reference.add(todo);
+    await _reference.add(todo.toJson());
   }
 }

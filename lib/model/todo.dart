@@ -1,16 +1,17 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Todo {
-  String? text;
-  bool? value;
+  String? todos;
+  bool? isChecked;
 
-  Todo({this.text, this.value});
+  Todo({this.todos, this.isChecked});
 
   factory Todo.fromFirestore(QueryDocumentSnapshot doc) {
-    return Todo(text: doc['text'] ?? '', value: doc['isChecked'] ?? false);
+    return Todo(
+        todos: doc['todos'] ?? '', isChecked: doc['isChecked'] ?? false);
   }
 
   Map<String, dynamic> toJson() {
-    return {'text': text, 'isChecked': value};
+    return {'todos': todos ?? '', 'isChecked': isChecked ?? false};
   }
 }
