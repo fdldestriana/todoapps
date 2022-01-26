@@ -10,6 +10,7 @@ class TodoList extends StatefulWidget {
 }
 
 class _TodoListState extends State<TodoList> {
+  FirestoreService service = FirestoreService();
   @override
   Widget build(BuildContext context) {
     var firestore = FirestoreService();
@@ -36,7 +37,9 @@ class _TodoListState extends State<TodoList> {
                       onDismissed: (direction) =>
 
                           /// DELETE DATA HERE
-                          null))
+                          setState(() {
+                            service.deleteTodo();
+                          })))
                   .toList(),
             );
           } else {

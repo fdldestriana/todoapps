@@ -6,13 +6,10 @@ final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 final CollectionReference _reference = _firestore.collection('todos');
 
 class DatabaseService with ChangeNotifier {
-  String? text;
-  bool? value;
-
-  DatabaseService({this.text, this.value});
+  DatabaseService();
 
   Future<void> deleteTodo() async {
-    await _reference.doc().collection('todos').doc().delete();
+    await _reference.doc().delete();
   }
 
   Future<void> updateTodo(bool? value) async {
@@ -25,14 +22,20 @@ class FirestoreService {
   final CollectionReference _reference =
       FirebaseFirestore.instance.collection('todos');
 
-  /// The new approcah for fetching data from firestore
+  /// Fetching stream data from firestore
   Stream<List<Todo>> streamReadTodo() {
     var todos = _reference.snapshots();
     return todos
         .map((todo) => todo.docs.map((e) => Todo.fromFirestore(e)).toList());
   }
 
+  /// Adding data to firestore
   Future<void> addTodo(Todo todo) async {
     await _reference.add(todo.toJson());
+  }
+
+  /// Deleting data from firestore
+  Future<void> deleteTodo() async {
+    await _reference.doc().collection('todos').doc().delete();
   }
 }
