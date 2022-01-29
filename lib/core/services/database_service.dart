@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_print
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:todoapps/core/model/todo.dart';
 
@@ -18,23 +20,23 @@ import 'package:todoapps/core/model/todo.dart';
 // }
 
 class FirestoreService {
-  final CollectionReference _reference =
+  final CollectionReference reference =
       FirebaseFirestore.instance.collection('todos');
 
   /// Fetching stream data from firestore
   Stream<List<Todo>> streamReadTodo() {
-    var todos = _reference.snapshots();
+    var todos = reference.snapshots();
     return todos
         .map((todo) => todo.docs.map((e) => Todo.fromFirestore(e)).toList());
   }
 
   /// Adding data to firestore
   Future<void> addTodo(Todo todo) async {
-    await _reference.add(todo.toJson());
+    await reference.doc(todo.id).set(todo.toJson());
   }
 
   /// Deleting data from firestore
-  Future<void> deleteTodo() async {
-    await _reference.doc().collection('todos').doc().delete();
+  Future<void> deleteTodo(String? id) async {
+    await reference.doc(id).delete();
   }
 }

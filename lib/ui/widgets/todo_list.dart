@@ -10,11 +10,11 @@ class TodoList extends StatefulWidget {
 }
 
 class _TodoListState extends State<TodoList> {
-  FirestoreService service = FirestoreService();
   @override
   Widget build(BuildContext context) {
     var firestore = FirestoreService();
     var todos = firestore.streamReadTodo();
+
     return StreamBuilder<List<Todo>>(
         stream: todos,
         builder: (context, snapshot) {
@@ -38,7 +38,7 @@ class _TodoListState extends State<TodoList> {
 
                           /// DELETE DATA HERE
                           setState(() {
-                            service.deleteTodo();
+                            firestore.deleteTodo(e.id);
                           })))
                   .toList(),
             );

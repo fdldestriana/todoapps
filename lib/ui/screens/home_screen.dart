@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:todoapps/core/model/todo.dart';
 import 'package:todoapps/core/services/database_service.dart';
 import 'package:todoapps/ui/widgets/todo_list.dart';
+import 'package:uuid/uuid.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key, required this.title}) : super(key: key);
@@ -16,6 +17,7 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     FirestoreService service = FirestoreService();
     Todo todo = Todo();
+    Uuid uuid = Uuid();
 
     return Scaffold(
       appBar: AppBar(
@@ -37,6 +39,7 @@ class _HomePageState extends State<HomePage> {
                   content: TextField(
                     onChanged: (String text) {
                       todo.todos = text;
+                      todo.id = uuid.v4();
                     },
                   ),
                   actions: <Widget>[
