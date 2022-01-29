@@ -30,7 +30,7 @@ class _TodoListState extends State<TodoList> {
                               value: e.isChecked,
                               onChanged: (value) {
                                 setState(() {
-                                  /// UPDATE DATA HERE
+                                  firestore.upadteTodo(e, value!);
                                 });
                               })),
                       // ignore: avoid_returning_null_for_void

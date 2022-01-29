@@ -39,4 +39,10 @@ class FirestoreService {
   Future<void> deleteTodo(String? id) async {
     await reference.doc(id).delete();
   }
+
+  /// Updating data from firestore
+  Future<void> upadteTodo(Todo todo, bool value) async {
+    todo.isChecked = value;
+    await reference.doc(todo.id).update(todo.toJson());
+  }
 }
