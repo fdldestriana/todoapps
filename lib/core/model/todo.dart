@@ -1,7 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/material.dart';
 
-class Todo with ChangeNotifier {
+class Todo {
   String? id;
   String? todos;
   bool isChecked;
@@ -19,6 +18,5 @@ class Todo with ChangeNotifier {
 
   void isDone() {
     isChecked = !isChecked;
-    notifyListeners();
   }
 }

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:todoapps/core/model/todo.dart';
 import 'package:todoapps/core/services/database_service.dart';
+import 'package:todoapps/ui/widgets/custom_floating_action_button.dart';
 import 'package:todoapps/ui/widgets/todo_list.dart';
 import 'package:uuid/uuid.dart';
 
@@ -20,46 +21,13 @@ class _HomePageState extends State<HomePage> {
     Uuid uuid = Uuid();
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('My Todos'),
-      ),
-      body: ListView(children: const [
-        /// VIEW DATA HERE
-        TodoList(),
-      ]),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          showDialog(
-              context: context,
-              builder: (context) {
-                return AlertDialog(
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10)),
-                  title: const Text('Add Todos'),
-                  content: TextField(
-                    onChanged: (String text) {
-                      todo.todos = text;
-                      todo.id = uuid.v4();
-                    },
-                  ),
-                  actions: <Widget>[
-                    TextButton(
-                        onPressed: () {
-                          /// ADD DATA HERE
-                          service.addTodo(todo);
-                          todo.todos = '';
-                          Navigator.of(context).pop();
-                        },
-                        child: const Text('Add'))
-                  ],
-                );
-              });
-        },
-        child: const Icon(
-          Icons.add,
-          color: Colors.white,
+        appBar: AppBar(
+          title: const Text('My Todos'),
         ),
-      ),
-    );
+        body: ListView(children: const [
+          /// VIEW DATA HERE
+          TodoList(),
+        ]),
+        floatingActionButton: const CustomFloatingActionButton());
   }
 }

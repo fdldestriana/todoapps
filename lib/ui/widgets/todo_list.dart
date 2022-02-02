@@ -33,7 +33,6 @@ class _TodoListState extends State<TodoList> {
                                   firestore.upadteTodo(e, value!);
                                 });
                               })),
-                      // ignore: avoid_returning_null_for_void
                       onDismissed: (direction) =>
 
                           /// DELETE DATA HERE

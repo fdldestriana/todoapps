@@ -1,23 +1,5 @@
-// ignore_for_file: avoid_print
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:todoapps/core/model/todo.dart';
-
-// final FirebaseFirestore _firestore = FirebaseFirestore.instance;
-// final CollectionReference _reference = _firestore.collection('todos');
-
-// class DatabaseService {
-//   DatabaseService();
-
-//   Future<void> deleteTodo() async {
-//     await _reference.doc().delete();
-//   }
-
-//   Future<void> updateTodo(bool? value) async {
-//     Map<String, bool> data = <String, bool>{'isChecked': value!};
-//     await _reference.doc().collection('todos').doc().update(data);
-//   }
-// }
 
 class FirestoreService {
   final CollectionReference reference =
