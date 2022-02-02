@@ -21,6 +21,8 @@ class _TodoListState extends State<TodoList> {
           if (snapshot.hasData) {
             return Column(
               children: snapshot.data!
+
+                  /// READ DATA HERE
                   .map((e) => Dismissible(
                       key: UniqueKey(),
                       child: Card(
@@ -28,6 +30,8 @@ class _TodoListState extends State<TodoList> {
                           child: CheckboxListTile(
                               title: Text(e.todos!),
                               value: e.isChecked,
+
+                              /// UPDATE DATA HERE
                               onChanged: (value) {
                                 setState(() {
                                   firestore.upadteTodo(e, value!);

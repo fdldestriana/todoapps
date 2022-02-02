@@ -9,9 +9,8 @@ class CustomFloatingActionButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Todo todo = Todo();
-    Uuid uuid = Uuid();
+    Uuid uuid = const Uuid();
     var firestore = FirestoreService();
-    var todos = firestore.streamReadTodo();
     return FloatingActionButton(
       onPressed: () {
         showDialog(
