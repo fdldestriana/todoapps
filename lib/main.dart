@@ -16,9 +16,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
         debugShowCheckedModeBanner: false,
         title: 'Flutter My Todo Apps',
-        theme: ThemeData(
-          primarySwatch: Colors.cyan,
-        ),
+        theme: ThemeData(primaryColor: Colors.cyanAccent),
         home: const HomePage(title: 'Flutter My Todos'));
   }
 }

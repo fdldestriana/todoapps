@@ -15,7 +15,12 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Center(child: Text('My Todos')),
+        backgroundColor: Colors.white,
+        title: const Center(
+            child: Text(
+          'My Todos',
+          style: TextStyle(color: Colors.black),
+        )),
       ),
       body: ListView(children: const [
         TodoList(),

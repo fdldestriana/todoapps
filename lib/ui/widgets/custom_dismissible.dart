@@ -13,30 +13,45 @@ class CustomDismissible extends StatefulWidget {
 class _CustomDismissibleState extends State<CustomDismissible> {
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final oldCheckboxTheme = theme.checkboxTheme;
+
+    final newCheckBoxTheme = oldCheckboxTheme.copyWith(
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(100)),
+    );
     var firestore = FirestoreService();
     return Dismissible(
         key: UniqueKey(),
         child: Card(
             elevation: 4,
-            color: (widget.todo.isChecked == true) ? Colors.cyan : Colors.white,
-            child: CheckboxListTile(
+            child: Theme(
+              data: theme.copyWith(checkboxTheme: newCheckBoxTheme),
+              child: CheckboxListTile(
+                  selectedTileColor: Colors.amber,
+                  checkColor: Colors.white,
+                  activeColor: Colors.lightGreen,
+                  // selected: true,
 
-                /// READ DATA HERE
-                title: Text(
-                  widget.todo.todos!,
-                  style: TextStyle(
-                      decoration: (widget.todo.isChecked == true)
-                          ? TextDecoration.lineThrough
-                          : TextDecoration.none),
-                ),
-                value: widget.todo.isChecked,
+                  /// READ DATA HERE
+                  title: Text(
+                    widget.todo.todos!,
+                    style: (widget.todo.isChecked == true)
+                        ? (const TextStyle(
+                            decoration: TextDecoration.lineThrough,
+                            color: Colors.blueGrey))
+                        : (const TextStyle(
+                            decoration: TextDecoration.none,
+                            color: Colors.black)),
+                  ),
+                  value: widget.todo.isChecked,
 
-                /// UPDATE DATA HERE
-                onChanged: (value) {
-                  setState(() {
-                    firestore.upadteTodo(widget.todo, value!);
-                  });
-                })),
+                  /// UPDATE DATA HERE
+                  onChanged: (value) {
+                    setState(() {
+                      firestore.upadteTodo(widget.todo, value!);
+                    });
+                  }),
+            )),
         onDismissed: (direction) =>
 
             /// DELETE DATA HERE
