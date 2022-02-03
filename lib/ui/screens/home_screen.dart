@@ -14,12 +14,14 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: const Text('My Todos'),
-        ),
-        body: ListView(children: const [
-          TodoList(),
-        ]),
-        floatingActionButton: const CustomFloatingActionButton());
+      appBar: AppBar(
+        title: const Center(child: Text('My Todos')),
+      ),
+      body: ListView(children: const [
+        TodoList(),
+      ]),
+      floatingActionButton: const CustomFloatingActionButton(),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+    );
   }
 }

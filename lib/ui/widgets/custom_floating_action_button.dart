@@ -19,7 +19,7 @@ class CustomFloatingActionButton extends StatelessWidget {
               return AlertDialog(
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10)),
-                title: const Text('Add Todos'),
+                title: const Center(child: Text('Add Todos')),
                 content: TextField(
                   onChanged: (String text) {
                     todo.todos = text;
