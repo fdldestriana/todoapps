@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:provider/provider.dart';
+import 'package:todoapps/core/services/firestore_service.dart';
 import 'package:todoapps/ui/pages/home_page.dart';
 
 void main() async {
@@ -13,10 +15,13 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'My Flutter Todo App',
-      home: HomePage(title: 'My Flutter Todo'),
+    return ChangeNotifierProvider(
+      create: (context) => FirestoreService(),
+      child: MaterialApp(
+        debugShowCheckedModeBanner: false,
+        title: 'My Flutter Todo App',
+        home: HomePage(title: 'My Flutter Todo'),
+      ),
     );
   }
 }
