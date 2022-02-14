@@ -1,6 +1,6 @@
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:todoapps/ui/screens/home_screen.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:todoapps/ui/pages/home_page.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -14,9 +14,9 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-        debugShowCheckedModeBanner: false,
-        title: 'Flutter My Todo Apps',
-        theme: ThemeData(primaryColor: Colors.cyanAccent),
-        home: const HomePage(title: 'Flutter My Todos'));
+      debugShowCheckedModeBanner: false,
+      title: 'My Flutter Todo App',
+      home: HomePage(title: 'My Flutter Todo'),
+    );
   }
 }

@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.todoapps">
+    package="com.example.mytodoapps">
    <application
         android:label="todoapps"
         android:icon="@mipmap/ic_launcher">

@@ -1,62 +1,63 @@
 import 'package:flutter/material.dart';
-import 'package:todoapps/core/model/todo.dart';
-import 'package:todoapps/core/services/database_service.dart';
+import 'package:todoapps/core/models/todo.dart';
+import 'package:todoapps/core/services/firestore_service.dart';
 
 class CustomDismissible extends StatefulWidget {
   Todo todo = Todo();
   CustomDismissible({Key? key, required this.todo}) : super(key: key);
 
   @override
-  State<CustomDismissible> createState() => _CustomDismissibleState();
+  _CustomDismissibleState createState() => _CustomDismissibleState();
 }
 
 class _CustomDismissibleState extends State<CustomDismissible> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final oldCheckboxTheme = theme.checkboxTheme;
-
-    final newCheckBoxTheme = oldCheckboxTheme.copyWith(
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(100)),
-    );
+    final oldCheckBoxTheme = theme.checkboxTheme;
+    final newCheckBoxTheme = oldCheckBoxTheme.copyWith(
+        shape:
+            RoundedRectangleBorder(borderRadius: BorderRadius.circular(100)));
     var firestore = FirestoreService();
     return Dismissible(
-        key: UniqueKey(),
-        child: Card(
-            elevation: 4,
-            child: Theme(
-              data: theme.copyWith(checkboxTheme: newCheckBoxTheme),
-              child: CheckboxListTile(
-                  selectedTileColor: Colors.amber,
-                  checkColor: Colors.white,
-                  activeColor: Colors.lightGreen,
-                  // selected: true,
+      key: UniqueKey(),
+      child: Card(
+        color: const Color(0xFF212121),
+        elevation: 4,
+        child: Theme(
+            data: theme.copyWith(checkboxTheme: newCheckBoxTheme),
+            child: CheckboxListTile(
+                selectedTileColor: Colors.amber,
+                checkColor: Colors.white,
+                activeColor: const Color(0xFFB39DDB),
 
-                  /// READ DATA HERE
-                  title: Text(
-                    widget.todo.todos!,
-                    style: (widget.todo.isChecked == true)
-                        ? (const TextStyle(
-                            decoration: TextDecoration.lineThrough,
-                            color: Colors.blueGrey))
-                        : (const TextStyle(
-                            decoration: TextDecoration.none,
-                            color: Colors.black)),
-                  ),
-                  value: widget.todo.isChecked,
+                ///Read data here
+                title: Text(
+                  widget.todo.todos!,
+                  style: (widget.todo.isChecked == true)
+                      ? (const TextStyle(
+                          decoration: TextDecoration.lineThrough,
+                          color: Colors.blueGrey))
+                      : (const TextStyle(
+                          decoration: TextDecoration.none,
+                          color: Colors.white)),
+                ),
+                value: widget.todo.isChecked,
 
-                  /// UPDATE DATA HERE
-                  onChanged: (value) {
-                    setState(() {
-                      firestore.upadteTodo(widget.todo, value!);
-                    });
-                  }),
-            )),
-        onDismissed: (direction) =>
+                ///Update data here
+                onChanged: (value) {
+                  setState(() {
+                    firestore.updateTodo(widget.todo);
+                  });
+                })),
+      ),
 
-            /// DELETE DATA HERE
-            setState(() {
-              firestore.deleteTodo(widget.todo.id);
-            }));
+      ///Delete data here
+      onDismissed: (direction) {
+        setState(() {
+          firestore.deleteTodo(widget.todo.id);
+        });
+      },
+    );
   }
 }

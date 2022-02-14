@@ -9,11 +9,11 @@ class Todo {
 
   factory Todo.fromFirestore(QueryDocumentSnapshot doc) {
     return Todo(
-        id: doc['id'], todos: doc['todos'] ?? '', isChecked: doc['isChecked']);
+        id: doc['id'], todos: doc['todos'], isChecked: doc['isChecked']);
   }
 
   Map<String, dynamic> toJson() {
-    return {'id': id, 'todos': todos ?? '', 'isChecked': isChecked};
+    return {'id': id, 'todos': todos, 'isChecked': isChecked};
   }
 
   void isDone() {
